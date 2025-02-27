@@ -143,7 +143,7 @@ class _Review extends State<Review> {
                   review['userID'],
                   review['content'],
                   review['createdAt'],
-                  (review['rating'] ?? 0.0).toDouble(), // ⭐ 평점 추가
+                  (review['rating'] ?? 0.0).toDouble(), // 평점 추가
                 );
               },
             );
