@@ -153,5 +153,3 @@ class _Review extends State<Review> {
     );
   }
 }
-// https://github.com/Baeora/riot_api_tools/blob/main/riot.txt
-// https://github.com/Na-rinn/mygit/blob/main/riot.txt
