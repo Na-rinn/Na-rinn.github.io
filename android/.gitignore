@@ -5,6 +5,17 @@ gradle-wrapper.jar
 /gradlew.bat
 /local.properties
 GeneratedPluginRegistrant.java
+build/
+android/.gradle/
+android/app/build/
+.idea/
+*.iml
+*.lock
+pubspec.lock
+flutter_gen/
+.melos/
+.dart_tool/
+.packages
 
 # Remember to never publicly share your keystore.
 # See https://flutter.dev/docs/deployment/android#reference-the-keystore-from-the-app
