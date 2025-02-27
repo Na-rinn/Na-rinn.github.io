@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lolplatform/screen/match_page.dart';
+import 'package:lolplatform/screen/reviewed_page.dart';
+import 'package:lolplatform/screen/review_page.dart';
 
 const buttonColor = Color(0xFFE5E9F0); // 연한 회색빛 색상
 const tintColor = Color(0xFFE5E9F0);
@@ -11,56 +13,59 @@ class Setting extends StatefulWidget {
 }
 
 class _Setting extends State<Setting> {
+  static const Color primaryBlue = Color(0xFF4A90E2); // 파란색
+  static const Color buttonColor = Color(0xFFE5E9F0);
 
   Widget buildButton(String title, VoidCallback onPressed) {
-    return SizedBox(
-      width: double.infinity, // 가로로 꽉 채움
-      height: 80,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: buttonColor,
-          surfaceTintColor: tintColor,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-            side: const BorderSide(color: Colors.white),
-          ),
-        ),
-        child: Row(
-          children: [
-            const SizedBox(width: 10),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center, // 글자 세로 중앙 정렬
-              crossAxisAlignment: CrossAxisAlignment.start, // 텍스트 왼쪽 정렬
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    color: Colors.black87,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5), // 바깥 여백 추가
+      child: SizedBox(
+        width: double.infinity,
+        height: 100, // MatchScreen과 비슷한 높이
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: buttonColor,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10), // 내부 여백 추가
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
             ),
-          ],
+            splashFactory: NoSplash.splashFactory, // 클릭 효과 제거
+          ),
+          child: Row(
+            children: [
+              const SizedBox(width: 10), // 왼쪽 여백
+              Expanded( // MatchScreen과 유사한 구조
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10), // 오른쪽 여백 추가
+            ],
+          ),
         ),
       ),
     );
   }
-
-
   int _selectedIndex = 1; // 0: 매칭, 1:설정
-
 // 탭을 눌렀을 때 해당 페이지로 이동하는 함수
   void _onItemTapped(int index) {
     if (index != _selectedIndex) { // 현재 페이지가 아닌 다른 탭을 눌렀을 때만
       if (index == 0) { // 추천 탭
         Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MatchScreen()),
+          context, MaterialPageRoute(builder: (context) => MatchScreen()),
         );
       }
     }
@@ -86,13 +91,15 @@ class _Setting extends State<Setting> {
           children: [
 
             buildButton('나의 정보', () {
-
+              Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Reviewed()), // Reviewed 페이지로 이동
+              );
             }),
-            buildButton('매칭 기록', () {
-
-            }),
+            const SizedBox(height: 10),
             buildButton('내가 남긴 리뷰', (){
-
+              Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Review()),
+              );
             }),
           ],
         ),
@@ -122,8 +129,8 @@ class _Setting extends State<Setting> {
             label: '설정',
           ),
         ],
-        selectedItemColor: Colors.red,
-        unselectedItemColor:Colors.black,
+        selectedItemColor: primaryBlue,
+        unselectedItemColor: Colors.black87,
       ),
     );
   }

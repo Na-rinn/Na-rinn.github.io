@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lolplatform/screen/match_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:lolplatform/screen/roit_login.dart';
+
+const buttonColor = Color(0xFFE5E9F0); // 연한 회색빛 색상
+const tintColor = Color(0xFFE5E9F0);
 
 class LogIn extends StatefulWidget {
   @override
@@ -29,7 +31,6 @@ class _LogInState extends State<LogIn> {
           accessToken: _googleAuth.accessToken,
           idToken: _googleAuth.idToken,
         );
-
         // Firebase 로그인 수행
         await _auth.signInWithCredential(credential);
 
@@ -43,7 +44,7 @@ class _LogInState extends State<LogIn> {
         //match_page.dart 페이지로 이동
         Navigator.pushReplacement( // 뒤로 가기 버튼을 눌러도 돌아 갈 수 없음
           context,
-          MaterialPageRoute(builder: (context) => RiotLogin()),
+          MaterialPageRoute(builder: (context) => MatchScreen()),
         );
       }
     } catch (error) {
@@ -59,18 +60,25 @@ class _LogInState extends State<LogIn> {
 
   Widget buildButton(String text, VoidCallback onPressed) {
     return SizedBox(
-      width: 300,
+      width: double.infinity, // 가로로 꽉 채움
+      height: 100,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: Text(
-          text,
-          style: TextStyle(color: Colors.black),
-        ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFFE5E9F0),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          backgroundColor: buttonColor,
+          surfaceTintColor: tintColor,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          elevation: 0,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15)
+          ),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 17,
+            //fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
       ),
@@ -80,6 +88,7 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Log in'), // Appbar 중앙에 "log in" 이라는 텍스트를 표시
         backgroundColor: Colors.white,
@@ -101,13 +110,13 @@ class _LogInState extends State<LogIn> {
                   ),
                 ),
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 50.0),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
                       buildButton('google로 로그인', () {
                         signInWithGoogle();
                       }),
-                      SizedBox(height: 30.0), // 구분선과 다음 button의 간격
+                      SizedBox(height: 10.0), // 구분선과 다음 button의 간격
                       buildButton('apple로 로그인', () {
                         // 동작 구현
                       }),
