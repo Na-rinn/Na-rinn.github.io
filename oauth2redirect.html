@@ -1,10 +1,26 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <!-- Riot OAuth2 로그인 후 리디렉션을 Flutter Web이 처리할 수 있도록 해주는 HTML -->
-    <meta http-equiv="refresh" content="0;url=/#${location.search}">
-</head>
-<body>
-Redirecting...
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+    <script>
+      window.onload = () => {
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("code");
+        if (code) {
+          const redirectUrl = `myapp://callback?code=${code}`;
+          // 자동 리디렉션
+          window.location.href = redirectUrl;
+
+          // 버튼용 링크도 설정
+          document.getElementById("link").href = redirectUrl;
+        }
+      };
+    </script>
+  </head>
+  <body>
+    <h2>앱으로 리디렉션 중입니다...</h2>
+    <p>잠시만 기다려 주세요. 자동으로 이동하지 않으면 아래 버튼을 눌러주세요.</p>
+    <a id="link" href="#"><button>앱으로 돌아가기</button></a>
+  </body>
 </html>
