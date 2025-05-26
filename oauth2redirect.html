@@ -1,26 +1,22 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="UTF-8">
     <title>Redirecting...</title>
     <script>
-      window.onload = () => {
-        const params = new URLSearchParams(window.location.search);
-        const code = params.get("code");
-        if (code) {
-          const redirectUrl = `myapp://callback?code=${code}`;
-          // 자동 리디렉션
-          window.location.href = redirectUrl;
-
-          // 버튼용 링크도 설정
-          document.getElementById("link").href = redirectUrl;
-        }
-      };
+        window.onload = () => {
+          const hash = window.location.hash; // ex: #access_token=...
+          if (hash) {
+            const redirectUrl = `lolplatform://callback${hash}`;
+            window.location.href = redirectUrl;
+            document.getElementById("link").href = redirectUrl;
+          }
+        };
     </script>
-  </head>
-  <body>
-    <h2>앱으로 리디렉션 중입니다...</h2>
-    <p>잠시만 기다려 주세요. 자동으로 이동하지 않으면 아래 버튼을 눌러주세요.</p>
-    <a id="link" href="#"><button>앱으로 돌아가기</button></a>
-  </body>
+</head>
+<body>
+<h2>앱으로 리디렉션 중입니다...</h2>
+<p>자동으로 이동하지 않으면 아래 버튼을 눌러주세요.</p>
+<a id="link" href="#"><button>앱으로 돌아가기</button></a>
+</body>
 </html>
