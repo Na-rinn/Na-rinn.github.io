@@ -1,18 +1,130 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Redirecting...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .loading {
+            margin: 20px 0;
+        }
+        .fallback {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+        }
+        .manual-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #D13639;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .debug-info {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
     <script>
-        // 이건 앱으로 리디렉션할 수 있도록 커스텀 URI scheme 처리
-        const hash = window.location.hash;
-        if (hash) {
-          window.location.replace("lolplatform://" + hash);
-        } else {
-          document.body.innerText = "잘못된 접근입니다.";
+        window.onload = () => {
+            console.log('페이지 로드됨');
+            const hash = window.location.hash;
+            console.log('현재 hash:', hash);
+
+            // 디버그 정보 표시
+            document.getElementById('debug-info').innerHTML = `
+                <strong>Debug Info:</strong><br>
+                URL: ${window.location.href}<br>
+                Hash: ${hash}<br>
+                User Agent: ${navigator.userAgent}
+            `;
+
+            if (hash) {
+                const redirectUrl = `lolplatform://callback${hash}`;
+                console.log('리디렉션 URL:', redirectUrl);
+
+                try {
+                    // 방법 1: 프로그래밍 방식으로 리디렉션
+                    window.location.href = redirectUrl;
+
+                    // 방법 2: 백업용 - 숨겨진 링크 클릭
+                    setTimeout(() => {
+                        const a = document.createElement('a');
+                        a.href = redirectUrl;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    }, 500);
+
+                    // 수동 링크 설정
+                    document.getElementById('manualLink').href = redirectUrl;
+
+                    // 2초 후 폴백 표시
+                    setTimeout(() => {
+                        document.getElementById('fallback').style.display = 'block';
+                        console.log('폴백 표시됨');
+                    }, 2000);
+
+                } catch (error) {
+                    console.error('리디렉션 오류:', error);
+                    document.getElementById('fallback').style.display = 'block';
+                }
+            } else {
+                console.log('Hash가 없음');
+                document.getElementById('no-hash').style.display = 'block';
+            }
+        };
+
+        // 수동 링크 클릭 시 로그
+        function manualRedirect() {
+            console.log('수동 리디렉션 시도');
+            const hash = window.location.hash;
+            const redirectUrl = `lolplatform://callback${hash}`;
+            window.location.href = redirectUrl;
         }
     </script>
 </head>
 <body>
-앱으로 리디렉션 중입니다...
+<div class="container">
+    <h2>🔄 앱으로 리디렉션 중입니다...</h2>
+    <div class="loading">
+        <p>잠시만 기다려주세요...</p>
+    </div>
+
+    <div id="fallback" class="fallback" style="display: none;">
+        <p><strong>앱이 자동으로 열리지 않나요?</strong></p>
+        <p>아래 버튼을 눌러 수동으로 앱을 열어주세요.</p>
+        <a id="manualLink" href="#" class="manual-link" onclick="manualRedirect()">
+            앱에서 열기
+        </a>
+    </div>
+
+    <div id="no-hash" style="display: none;">
+        <p>⚠️ 인증 정보가 없습니다. 다시 로그인해주세요.</p>
+    </div>
+
+    <div id="debug-info" class="debug-info"></div>
+</div>
 </body>
 </html>
