@@ -30,32 +30,31 @@
     <h2>앱으로 리디렉션 중입니다...</h2>
     <p class="loading">잠시만 기다려주세요...</p>
 </div>
-
 <script>
     (function () {
-    const url = new URL(window.location.href);
-    const code = url.searchParams.get("code");
-    const error = url.searchParams.get("error");
+      const url = new URL(window.location.href);
+      const code = url.searchParams.get("code");
+      const error = url.searchParams.get("error");
 
-    if (error) {
-      document.querySelector('.loading').textContent = '인증 오류 발생: ' + error;
-      return;
-    }
+      if (error) {
+        document.querySelector('.loading').textContent = '인증 오류 발생: ' + error;
+        return;
+      }
 
-    if (!code) {
-      document.querySelector('.loading').textContent = '인증 정보가 없습니다. 다시 로그인해주세요.';
-      return;
-    }
+      if (!code) {
+        document.querySelector('.loading').textContent = '인증 정보가 없습니다.';
+        return;
+      }
 
-    const redirectUrl = `lolplatform://callback?code=${code}`;
-    console.log("✅ Authorization code:", code);
-    console.log("🔁 Redirecting to app:", redirectUrl);
+      const redirectUrl = `lolplatform://callback?code=${code}`;
+      console.log("✅ Authorization code:", code);
+      console.log("🔁 Redirecting to app:", redirectUrl);
 
-    // 앱으로 리디렉션 시도
-    setTimeout(() => {
-      window.location.href = redirectUrl;
-    }, 2000);
-  })();
+      setTimeout(() => {
+        window.location.href = redirectUrl;
+      }, 2000);
+    })(); // 이 괄호로 감싸서 return 사용 가능
 </script>
+
 </body>
 </html>
