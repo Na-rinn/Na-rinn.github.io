@@ -32,6 +32,7 @@
 </div>
 
 <script>
+    (function () {
     const url = new URL(window.location.href);
     const code = url.searchParams.get("code");
     const error = url.searchParams.get("error");
@@ -50,10 +51,11 @@
     console.log("✅ Authorization code:", code);
     console.log("🔁 Redirecting to app:", redirectUrl);
 
-    // 앱으로 리디렉션
+    // 앱으로 리디렉션 시도
     setTimeout(() => {
       window.location.href = redirectUrl;
-    }, 100);
+    }, 2000);
+  })();
 </script>
 </body>
 </html>
