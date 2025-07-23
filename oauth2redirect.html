@@ -39,12 +39,19 @@
       const loadingText = document.querySelector('.loading');
 
       if (error) {
-        document.querySelector('.loading').textContent = '인증 오류 발생: ' + error;
+        loadingText.textContent = '인증 오류 발생: ' + error;
+        // 에러도 앱으로 전달
+        setTimeout(() => {
+          window.location.href = `lolplatform://callback?error=${error}`;
+        }, 1000);
         return;
       }
 
       if (!code) {
-        document.querySelector('.loading').textContent = '인증 정보가 없습니다.';
+        loadingText.textContent = '인증 정보가 없습니다.';
+        setTimeout(() => {
+          window.location.href = `lolplatform://callback?error=no_code`;
+        }, 1000);
         return;
       }
 
@@ -52,11 +59,10 @@
       console.log("✅ Authorization code:", code);
       console.log("🔁 Redirecting to app:", redirectUrl);
 
-
-
+      // 즉시 리다이렉트 (브라우저가 처리할 시간을 조금 줌)
       setTimeout(() => {
         window.location.href = redirectUrl;
-      }, 2000);
+      }, 500);
     })();
 </script>
 
