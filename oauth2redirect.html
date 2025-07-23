@@ -36,6 +36,8 @@
       const code = url.searchParams.get("code");
       const error = url.searchParams.get("error");
 
+      const loadingText = document.querySelector('.loading');
+
       if (error) {
         document.querySelector('.loading').textContent = '인증 오류 발생: ' + error;
         return;
@@ -50,10 +52,12 @@
       console.log("✅ Authorization code:", code);
       console.log("🔁 Redirecting to app:", redirectUrl);
 
+
+
       setTimeout(() => {
         window.location.href = redirectUrl;
       }, 2000);
-    })(); // 이 괄호로 감싸서 return 사용 가능
+    })();
 </script>
 
 </body>
