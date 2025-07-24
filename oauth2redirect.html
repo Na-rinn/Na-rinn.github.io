@@ -55,7 +55,7 @@
         return;
       }
 
-      const redirectUrl = `lolplatform://oauth?code=${code}`;
+      const redirectUrl = `lolplatform://callback?code=${code}`;
       console.log("✅ Authorization code:", code);
       console.log("🔁 Redirecting to app:", redirectUrl);
 
