@@ -91,7 +91,7 @@
         loadingText.textContent = '로그인 실패: ' + data.error;
 
         setTimeout(() => {
-          window.location.href = `lolplatform://error?message=${data.error}`;
+          window.location.href = `lolplatform://callback?error=${data.error}`;
         }, 2000);
       }
     })
