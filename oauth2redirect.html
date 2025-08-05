@@ -84,7 +84,7 @@
         loadingText.textContent = '로그인 성공! 앱으로 이동 중...';
 
         setTimeout(() => {
-          window.location.href = `lolplatform://success?userInfo=${userInfo}`;
+          window.location.href = `lolplatform://callback?userInfo=${userInfo}`;
         }, 1000);
       } else {
         console.log("❌ 실패:", data.error);
@@ -101,7 +101,7 @@
       loadingText.textContent = '네트워크 오류: ' + err.message;
 
       setTimeout(() => {
-        window.location.href = `lolplatform://error?message=${err.message}`;
+        window.location.href = `lolplatform://callback?error=true&message=${errorMessage}`;
       }, 3000);
     });
 })();
