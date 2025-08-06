@@ -41,7 +41,7 @@
   if (error) {
     loadingText.textContent = '인증 오류 발생: ' + error;
     setTimeout(() => {
-      window.location.href = `lolplatform://error?message=${error}`;
+      window.location.href = `com.example.lolplatform://oauth2redirect?error=${error}`;
     }, 1000);
     return;
   }
@@ -49,7 +49,7 @@
   if (!code) {
     loadingText.textContent = '인증 정보가 없습니다.';
     setTimeout(() => {
-      window.location.href = `lolplatform://error?message=no_code`;
+      window.location.href = `com.example.lolplatform://oauth2redirect?error=no_code`;
     }, 1000);
     return;
   }
@@ -84,14 +84,14 @@
         loadingText.textContent = '로그인 성공! 앱으로 이동 중...';
 
         setTimeout(() => {
-          window.location.href = `lolplatform://success?userInfo=${userInfo}`;
+          window.location.href = `com.example.lolplatform://oauth2redirect?userInfo=${userInfo}`;
         }, 2000);
       } else {
         console.log("❌ 실패:", data.error);
         loadingText.textContent = '로그인 실패: ' + data.error;
 
         setTimeout(() => {
-          window.location.href = `lolplatform://error?message=${data.error}`;
+          window.location.href = `com.example.lolplatform://oauth2redirect?error=${data.error}`;
         }, 2000);
       }
     })
@@ -101,7 +101,7 @@
       loadingText.textContent = '네트워크 오류: ' + err.message;
 
       setTimeout(() => {
-        window.location.href = `lolplatform://error?message=${err.message}`;
+        window.location.href = `com.example.lolplatform://oauth2redirect?error=${err.message}`;
       }, 3000);
     });
 })();
