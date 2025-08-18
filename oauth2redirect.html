@@ -211,7 +211,7 @@
         <div class="user-name" id="userName">-</div>
     </div>
     <p>Riot 계정이 성공적으로 연동되었습니다.</p>
-    
+
     <!-- 강조된 돌아가기 안내 -->
     <div class="return-box">
         <div class="app-icon">📱</div>
@@ -219,7 +219,7 @@
         <div class="return-desc">
             <strong>앱으로 돌아가시면 자동으로 로그인이 완료됩니다</strong>
         </div>
-        
+
         <div class="return-steps">
             <div class="step">
                 <div class="step-number">1</div>
@@ -245,7 +245,7 @@
         오류가 발생했습니다
     </div>
     <p>앱으로 돌아가서 다시 시도해주세요</p>
-    
+
     <div class="return-box">
         <div class="app-icon">📱</div>
         <div class="return-title">LoL Platform 앱으로 돌아가주세요</div>
@@ -256,6 +256,18 @@
 </div>
 
 <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAKhAMCeugu906I6_W4tXMneLgK2MiLrdk",
+      authDomain: "lolplatform-eb04b.firebaseapp.com",
+      projectId: "lolplatform-eb04b",
+      storageBucket: "lolplatform-eb04b.firebasestorage.app",
+      messagingSenderId: "496113701296",
+      appId: "1:496113701296:web:3dde60e52a363a9a0fc675",
+      measurementId: "G-W7MZMG7H7J"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
     (async function() {
         const url = new URL(window.location.href);
         const code = url.searchParams.get("code");
@@ -314,14 +326,14 @@
                 // 성공 화면 표시
                 showSuccess(data.userInfo);
 
-                // sessionId가 있으면 Firebase의 세션 업데이트
+                // sessionId가 있으면 Firebase의 세션에 결과 저장
                 if (sessionId) {
-                    console.log("📝 세션 업데이트 중...");
+                    console.log("📝 세션 결과 저장 중...");
 
                     try {
-                        // Firebase Function으로 세션 업데이트
-                        const updateResponse = await fetch(
-                            `https://us-central1-lolplatform-eb04b.cloudfunctions.net/riotOauth/updateSessionFromGitHub`,
+                        // Firebase Function으로 세션 결과 저장
+                        const saveResponse = await fetch(
+                            `https://us-central1-lolplatform-eb04b.cloudfunctions.net/riotOauth/saveSession`,
                             {
                                 method: 'POST',
                                 mode: 'cors',
@@ -330,20 +342,20 @@
                                 },
                                 body: JSON.stringify({
                                     sessionId: sessionId,
+                                    success: true,
                                     userInfo: data.userInfo,
-                                    accessToken: data.accessToken  // 필요한 경우
+                                    accessToken: data.accessToken
                                 }),
                             }
                         );
 
-                        if (updateResponse.ok) {
-                            console.log("✅ 세션 업데이트 완료");
+                        if (saveResponse.ok) {
+                            console.log("✅ 세션 결과 저장 완료");
                         } else {
-                            console.warn("⚠️ 세션 업데이트 실패 (앱에서 폴링으로 처리됨)");
+                            console.warn("⚠️ 세션 결과 저장 실패");
                         }
-                    } catch (updateError) {
-                        console.warn("⚠️ 세션 업데이트 에러:", updateError);
-                        // 세션 업데이트 실패해도 성공 화면은 표시 (앱에서 폴링으로 처리)
+                    } catch (saveError) {
+                        console.warn("⚠️ 세션 저장 에러:", saveError);
                     }
                 }
 
