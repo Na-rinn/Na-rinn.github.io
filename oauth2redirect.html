@@ -282,7 +282,7 @@
         const successScreen = document.getElementById('successScreen');
         const errorScreen = document.getElementById('errorScreen');
 
-        awync function showSuccess(userInfo) {
+        async function showSuccess(userInfo) {
             loadingScreen.classList.add('hidden');
             successScreen.classList.remove('hidden');
             if (userInfo) {
