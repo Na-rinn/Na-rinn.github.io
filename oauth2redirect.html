@@ -294,15 +294,16 @@
 
                 const existingUser = await db.collection('users')
                     .where('puuid' , '==', userInfo.puuid)
-                    .linit(1)
+                    .limit(1)
                     .get();
 
-                if(existingUser.empty)  {
-                    await existingUser.docs[0].ref.updata({
-                        lastLogintime: newDate()
+                if(!existingUser.empty)  { //기존 사용자가 있으면
+                    await existingUser.docs[0].ref.update({
+                        lastLogintime: new Date()
                     });
+                    console.log("✅기존 사용자 생성 완료!");
                 } else {
-                    await db.collection('user').add({
+                    await db.collection('users').add({
                         gameName: userInfo.gameName,
                         tagLine: userInfo.tagLine,
                         puuid: userInfo.puuid,
