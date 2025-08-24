@@ -275,7 +275,7 @@
     (async function() {
         const url = new URL(window.location.href);
         const code = url.searchParams.get("code");
-        const sessionId = url.searchParams.get("state");  // Riot OAuth state에 sessionId 전달
+        const sessionId = url.searchParams.get("state");
         const error = url.searchParams.get("error");
 
         const loadingScreen = document.getElementById('loadingScreen');
@@ -289,34 +289,41 @@
                 document.getElementById('userName').textContent =
                     `${userInfo.gameName}#${userInfo.tagLine}`;
             }
-             try {
+            
+            try {
                 console.log("💾 Firestore에 사용자 정보 저장 중...");
 
+                // ✅ 중복 저장 방지: 기존 사용자 확인
                 const existingUser = await db.collection('users')
-                    .where('puuid' , '==', userInfo.puuid)
+                    .where('puuid', '==', userInfo.puuid)
                     .limit(1)
                     .get();
 
-                if(!existingUser.empty)  { //기존 사용자가 있으면
+                if (!existingUser.empty) {
+                    // ✅ 기존 사용자 업데이트
                     await existingUser.docs[0].ref.update({
-                        lastLogintime: new Date()
+                        gameName: userInfo.gameName,
+                        tagLine: userInfo.tagLine,
+                        lastLoginTime: firebase.firestore.FieldValue.serverTimestamp(),
+                        isRiotLinked: true
                     });
-                    console.log("✅기존 사용자 생성 완료!");
+                    console.log("✅ 기존 사용자 정보 업데이트 완료!");
                 } else {
+                    // ✅ 새 사용자 생성
                     await db.collection('users').add({
                         gameName: userInfo.gameName,
                         tagLine: userInfo.tagLine,
                         puuid: userInfo.puuid,
                         isRiotLinked: true,
-                        avgRating: "0.0",
-                        tier: "-",
-                        createdAt: new Date(),
-                        lastLoginTime: new Date()
+                        avgRating: 0.0,
+                        tier: "",
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastLoginTime: firebase.firestore.FieldValue.serverTimestamp()
                     });
                     console.log("✅ 새 사용자 생성 완료!");
                 }
 
-                // 임시 로그인 상태도 저장 (앱에서 확인용)
+                // ✅ 임시 로그인 상태 저장 (앱에서 확인용)
                 await db.collection('temp_login').doc('latest').set({
                     gameName: userInfo.gameName,
                     tagLine: userInfo.tagLine,
@@ -339,7 +346,6 @@
         }
 
         try {
-            // 에러 체크
             if (error) {
                 throw new Error('인증 오류: ' + error);
             }
@@ -351,7 +357,6 @@
             console.log("✅ Authorization code:", code);
             console.log("📝 Session ID:", sessionId);
 
-            // Firebase Function 호출하여 토큰 교환
             const functionUrl = `https://us-central1-lolplatform-eb04b.cloudfunctions.net/riotOauth?code=${code}`;
 
             const response = await fetch(functionUrl, {
@@ -367,7 +372,6 @@
             console.log("🔥 Firebase 응답:", data);
 
             if (data.success && data.userInfo) {
-                // 성공 화면 표시 및 Firestore 저장
                 await showSuccess(data.userInfo);
             } else {
                 throw new Error(data.error || '로그인 실패');
